@@ -3,8 +3,8 @@
 CloudWatch **metric alarms**, **composite alarms**, and **dashboards** in one module.
 
 - Define alarms with a consistent schema (with optional default SNS actions)
-- Compose alarms using CloudWatch `ALARM`/`OK`/`INSUFFICIENT_DATA` rules
-- Build dashboards by passing raw widget JSON (we `jsonencode` for you)
+- Compose alarms via CloudWatch `ALARM`/`OK`/`INSUFFICIENT_DATA` rules
+- Build dashboards by passing raw widget JSON (module `jsonencode`s for you)
 
 ## Usage
 
@@ -14,12 +14,13 @@ provider "aws" {
 }
 
 module "observability" {
-  source  = "github.com/JasTandon/terraform-aws-observability?ref=v0.1.0"
+  source  = "JasTandon/observability/aws"
+  version = "0.1.0"
 
   # Optional: create a default SNS topic for all alarms
   create_sns_topic           = true
-  sns_topic_name             = "vrpro-cw-alarms"
-  default_alarm_action_arns  = [] # if empty, and create_sns_topic=true, module uses the created SNS topic.
+  sns_topic_name             = "demo-cw-alarms"
+  default_alarm_action_arns  = [] # if empty and create_sns_topic=true, module uses the created SNS topic.
 
   tags = {
     Project = "vrpro"
@@ -39,8 +40,6 @@ module "observability" {
       comparison_operator  = "GreaterThanOrEqualToThreshold"
       treat_missing_data   = "notBreaching"
       alarm_description    = "ASG CPU >= 80% for 10m"
-      # optional per-alarm actions override
-      # alarm_actions      = ["arn:aws:sns:us-east-1:123456789012:my-topic"]
       tags                 = { Service = "web" }
     }
   ]
