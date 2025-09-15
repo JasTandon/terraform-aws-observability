@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 module "observability" {
-  source  = "github.com/YOUR_GH_USER/terraform-aws-observability?ref=v0.1.0"
+  source  = "github.com/JasTandon/terraform-aws-observability?ref=v0.1.0"
 
   # Optional: create a default SNS topic for all alarms
   create_sns_topic           = true
