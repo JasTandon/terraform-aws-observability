@@ -51,25 +51,25 @@ Schema:
 - tags (map(string))
 EOT
   type = list(object({
-    name                       = string
-    namespace                  = string
-    metric_name                = string
-    dimensions                 = optional(map(string), {})
-    statistic                  = optional(string)
-    extended_statistic         = optional(string)
-    period                     = number
-    evaluation_periods         = number
-    threshold                  = number
-    comparison_operator        = string
-    treat_missing_data         = optional(string)
-    datapoints_to_alarm        = optional(number)
-    unit                       = optional(string)
-    alarm_description          = optional(string)
-    actions_enabled            = optional(bool, true)
-    alarm_actions              = optional(list(string))
-    ok_actions                 = optional(list(string))
-    insufficient_data_actions  = optional(list(string))
-    tags                       = optional(map(string), {})
+    name                      = string
+    namespace                 = string
+    metric_name               = string
+    dimensions                = optional(map(string), {})
+    statistic                 = optional(string)
+    extended_statistic        = optional(string)
+    period                    = number
+    evaluation_periods        = number
+    threshold                 = number
+    comparison_operator       = string
+    treat_missing_data        = optional(string)
+    datapoints_to_alarm       = optional(number)
+    unit                      = optional(string)
+    alarm_description         = optional(string)
+    actions_enabled           = optional(bool, true)
+    alarm_actions             = optional(list(string))
+    ok_actions                = optional(list(string))
+    insufficient_data_actions = optional(list(string))
+    tags                      = optional(map(string), {})
   }))
   default = []
 }
@@ -86,14 +86,14 @@ Schema:
 - tags (map(string))
 EOT
   type = list(object({
-    name                       = string
-    alarm_rule                 = string
-    alarm_description          = optional(string)
-    actions_enabled            = optional(bool, true)
-    alarm_actions              = optional(list(string))
-    ok_actions                 = optional(list(string))
-    insufficient_data_actions  = optional(list(string))
-    tags                       = optional(map(string), {})
+    name                      = string
+    alarm_rule                = string
+    alarm_description         = optional(string)
+    actions_enabled           = optional(bool, true)
+    alarm_actions             = optional(list(string))
+    ok_actions                = optional(list(string))
+    insufficient_data_actions = optional(list(string))
+    tags                      = optional(map(string), {})
   }))
   default = []
 }

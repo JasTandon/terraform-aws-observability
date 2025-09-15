@@ -70,25 +70,25 @@ module "observability" {
     "example-observability" = {
       widgets = [
         {
-          "type": "metric",
-          "x": 0, "y": 0, "width": 12, "height": 6,
-          "properties": {
-            "metrics": [["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", "my-asg"]],
-            "stat": "Average",
-            "period": 300,
-            "region": var.region,
-            "title": "ASG CPU"
+          "type" : "metric",
+          "x" : 0, "y" : 0, "width" : 12, "height" : 6,
+          "properties" : {
+            "metrics" : [["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", "my-asg"]],
+            "stat" : "Average",
+            "period" : 300,
+            "region" : var.region,
+            "title" : "ASG CPU"
           }
         },
         {
-          "type": "metric",
-          "x": 12, "y": 0, "width": 12, "height": 6,
-          "properties": {
-            "metrics": [["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", "app/my-alb/1234567890abcdef"]],
-            "stat": "Sum",
-            "period": 300,
-            "region": var.region,
-            "title": "ALB 5XX"
+          "type" : "metric",
+          "x" : 12, "y" : 0, "width" : 12, "height" : 6,
+          "properties" : {
+            "metrics" : [["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", "app/my-alb/1234567890abcdef"]],
+            "stat" : "Sum",
+            "period" : 300,
+            "region" : var.region,
+            "title" : "ALB 5XX"
           }
         }
       ]

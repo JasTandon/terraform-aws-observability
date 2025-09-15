@@ -13,10 +13,10 @@ resource "random_id" "suffix" {
 }
 
 resource "aws_sns_topic" "this" {
-  count              = var.create_sns_topic ? 1 : 0
-  name               = coalesce(var.sns_topic_name, "cw-alarms-${random_id.suffix[0].hex}")
-  kms_master_key_id  = var.sns_topic_kms_key_id
-  tags               = var.tags
+  count             = var.create_sns_topic ? 1 : 0
+  name              = coalesce(var.sns_topic_name, "cw-alarms-${random_id.suffix[0].hex}")
+  kms_master_key_id = var.sns_topic_kms_key_id
+  tags              = var.tags
 }
 
 resource "aws_cloudwatch_metric_alarm" "this" {
