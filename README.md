@@ -23,7 +23,7 @@ module "observability" {
   default_alarm_action_arns  = [] # if empty and create_sns_topic=true, module uses the created SNS topic.
 
   tags = {
-    Project = "vrpro"
+    Project = "demo"
     Env     = "dev"
   }
 
@@ -54,7 +54,7 @@ module "observability" {
   ]
 
   dashboards = {
-    "vrpro-observability" = {
+    "demo-observability" = {
       widgets = [
         {
           "type" : "metric",
