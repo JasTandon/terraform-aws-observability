@@ -76,10 +76,10 @@ locals {
   _log_group_arn = (
     var.enable_alarm_state_change_capture
     ? (
-        var.create_alarm_state_change_log_group
-        ? try(aws_cloudwatch_log_group.alarm_state_changes[0].arn, null)
-        : var.alarm_state_change_log_group_arn
-      )
+      var.create_alarm_state_change_log_group
+      ? try(aws_cloudwatch_log_group.alarm_state_changes[0].arn, null)
+      : var.alarm_state_change_log_group_arn
+    )
     : null
   )
 }
@@ -93,11 +93,11 @@ resource "aws_cloudwatch_log_group" "alarm_state_changes" {
 
 # EventBridge rule for Alarm State Change events
 resource "aws_cloudwatch_event_rule" "alarm_state_change" {
-  count        = var.enable_alarm_state_change_capture ? 1 : 0
-  name         = "alarm-state-change-to-logs"
-  description  = "Capture all CloudWatch Alarm State Change events"
+  count       = var.enable_alarm_state_change_capture ? 1 : 0
+  name        = "alarm-state-change-to-logs"
+  description = "Capture all CloudWatch Alarm State Change events"
   event_pattern = jsonencode({
-    "source"      : ["aws.cloudwatch"],
+    "source" : ["aws.cloudwatch"],
     "detail-type" : ["CloudWatch Alarm State Change"]
   })
 }
