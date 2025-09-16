@@ -60,8 +60,53 @@ resource "aws_cloudwatch_composite_alarm" "this" {
   tags = merge(var.tags, try(each.value.tags, {}))
 }
 
+############################################
+# CloudWatch Dashboards
+############################################
 resource "aws_cloudwatch_dashboard" "this" {
-  for_each       = var.dashboards
+  for_each       = var.cw_dashboards
   dashboard_name = each.key
-  dashboard_body = jsonencode({ widgets = each.value.widgets })
+  dashboard_body = each.value.body
+}
+
+############################################
+# Alarm State Change → CloudWatch Logs
+############################################
+locals {
+  _log_group_arn = (
+    var.enable_alarm_state_change_capture
+    ? (
+      var.create_alarm_state_change_log_group
+      ? try(aws_cloudwatch_log_group.alarm_state_changes[0].arn, null)
+      : var.alarm_state_change_log_group_arn
+    )
+    : null
+  )
+}
+
+# (optional) create log group
+resource "aws_cloudwatch_log_group" "alarm_state_changes" {
+  count             = var.enable_alarm_state_change_capture && var.create_alarm_state_change_log_group ? 1 : 0
+  name              = var.alarm_state_change_log_group_name
+  retention_in_days = var.alarm_state_change_log_retention_days
+}
+
+# EventBridge rule for Alarm State Change events
+resource "aws_cloudwatch_event_rule" "alarm_state_change" {
+  count       = var.enable_alarm_state_change_capture ? 1 : 0
+  name        = "alarm-state-change-to-logs"
+  description = "Capture all CloudWatch Alarm State Change events"
+  event_pattern = jsonencode({
+    "source" : ["aws.cloudwatch"],
+    "detail-type" : ["CloudWatch Alarm State Change"]
+  })
+}
+
+# EventBridge target to the log group (requires IAM role ARN)
+resource "aws_cloudwatch_event_target" "to_logs" {
+  count     = var.enable_alarm_state_change_capture ? 1 : 0
+  rule      = aws_cloudwatch_event_rule.alarm_state_change[0].name
+  target_id = "to-logs"
+  arn       = local._log_group_arn
+  role_arn  = var.eventbridge_to_logs_role_arn
 }
