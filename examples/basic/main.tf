@@ -66,7 +66,7 @@ module "observability" {
     }
   ]
 
-  dashboards = {
+  cw_dashboards = {
     "example-observability" = {
       widgets = [
         {
