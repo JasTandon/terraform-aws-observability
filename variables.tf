@@ -98,10 +98,55 @@ EOT
   default = []
 }
 
-variable "dashboards" {
-  description = "Map of dashboards to create. Value must contain a `widgets` list with valid CloudWatch widget JSON (will be jsonencoded)."
+# ---------------- CloudWatch Dashboards ----------------
+variable "cw_dashboards" {
+  description = <<EOT
+Map of CloudWatch dashboards to create.
+Key = dashboard name, Value.body = JSON string for dashboard_body.
+Example:
+cw_dashboards = {
+  "my-dash" = { body = jsonencode({ widgets = [...] }) }
+}
+EOT
   type = map(object({
-    widgets = list(any)
+    body = string
   }))
   default = {}
+}
+
+# ---------------- Alarm State Change → Logs (EventBridge) ----------------
+variable "enable_alarm_state_change_capture" {
+  description = "If true, create EventBridge rule/target to ship CloudWatch Alarm State Change events to CloudWatch Logs."
+  type        = bool
+  default     = false
+}
+
+variable "eventbridge_to_logs_role_arn" {
+  description = "IAM role ARN that EventBridge assumes to write into the destination log group (created by JasTandon/iam/aws). Required when enable_alarm_state_change_capture = true."
+  type        = string
+  default     = null
+}
+
+variable "create_alarm_state_change_log_group" {
+  description = "If true, create the destination CloudWatch Log Group here. If false, provide alarm_state_change_log_group_arn."
+  type        = bool
+  default     = true
+}
+
+variable "alarm_state_change_log_group_name" {
+  description = "Name of the CloudWatch Log Group to store alarm state change events (used when create_alarm_state_change_log_group = true)."
+  type        = string
+  default     = "/aws/events/cloudwatch-alarm-state-changes"
+}
+
+variable "alarm_state_change_log_retention_days" {
+  description = "Retention in days for the created log group."
+  type        = number
+  default     = 30
+}
+
+variable "alarm_state_change_log_group_arn" {
+  description = "If create_alarm_state_change_log_group = false, supply the target log group ARN here."
+  type        = string
+  default     = null
 }
